@@ -5,13 +5,17 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
 import { usePreOrder } from "../../hooks/usePreOrder";
+import { useState } from "react";
 import Badge from "./Badge";
+
 export default function Header() {
   const { cart } = useCart();
   const { preOrderCart } = usePreOrder();
+  const navigate = useNavigate();
+  const [showLoginForm, setShowLoginForm] = useState(false);
 
   const productCountInCart = cart.length + preOrderCart.length;
 
@@ -99,12 +103,40 @@ export default function Header() {
           </div>
         </div>
         <div className="items-center justify-between gap-x-3 hidden sm:flex">
-          <div>
+          <div onClick={() => setShowLoginForm((prev) => !prev)}>
             <NavLink to="/account" className={``}>
               {({ isActive }) =>
                 isActive ? <AccountCircleIcon /> : <AccountCircleOutlinedIcon />
               }
             </NavLink>
+
+            {showLoginForm && (
+              <div className="Login-SignUp-Form top-[76px] right-[36px] absolute  flex flex-col items-center justify-center shadow-xl ring-1 ring-gray-900/5 shrink-0 shadow-custom rounded bg-[#fff] font-['Poppins'] w-[245px] h-[128px] gap-[10px]">
+                <div
+                  onClick={() => navigate("/login")}
+                  className="flex items-center bg-[#BDE3A6] rounded-[10px] justify-center gap-[10px] py-[8px] px-[46px] w-[202px] h-[32px]"
+                >
+                  <span className="text-[16px] font-medium leading-normal text-[#434343] cursor-pointer">
+                    Log In
+                  </span>
+                </div>
+                <div className="flex gap-[12px]">
+                  <h2 className="text-[12px] text-[#474747] font-sans font-normal leading-6">
+                    Don’t have account?
+                  </h2>
+                  <h2
+                    onClick={() => navigate("/signup")}
+                    className="text-[12px] text-[#62864C] font-normal leading-6 underline decoration-solid decoration-auto underline-offset-auto cursor-pointer"
+                  >
+                    Create Here
+                  </h2>
+                </div>
+
+                <div className="text-[10px] text-[#757575] font-normal leading-6 font-sans">
+                  Login/Signup to view your Account
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <NavLink to="/favorite" className={``}>
